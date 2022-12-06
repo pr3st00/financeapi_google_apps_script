@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>	
+body {
+  background: #191970;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: smaller;
+}
+
+li {
+  color: white;
+  font-weight: 900;
+}
+
+p{
+	font-size: x-large;
+	color: #BC277E;
+}    
+   </style>
+  </head>
+  
+  <body>
+
+  <div id="menu">
+    <p> TOPICOS </p>
+	<ol>
+	<li> <a href="#descricao"> Descricao </a></li>
+	<li> <a href="#abas"> Abas </a></li>
+    <ol>
+		<li><a href="#visao_geral">Visao Geral</a></li>
+		<li><a href="#fiis">Fundos Imobiliarios</a></li>
+		<li><a href="#acoesnac">Acoes Nacionais</a></li>
+		<li><a href="#acoesint">Acoes Internacionais</a></li>
+		<li><a href="#historico">Historico</a></li>
+	</ol>
+	<li> <a href="#todolist">TODO List </a></li>
+	<li> <a href="#fundamentus">Fundamentus API</a></li>
+	<li> <a href="#contato"> Contato </a></li>
+  </div>
+
+  <hr/>
+  
+  <div id="help">
+    
+	<p><a id="descricao">DESCRICAO</a></p>
+	
+    <ul>
+		<li>
+			Planilha para controle e rebalanceamento de ativos de renda fixa e variavel. Permite que se redirecione os aportes buscando sempre manter
+			o equilibrio da macro alocacao desejada, ajudando tambem a comprar ativos que se desvalorizaram (baixa).
+		</li>
+		<li>
+			Os valores de cotacao e os indicadores das acoes nacionais e fiis sao atualizados automaticamente, servindo como ajuda nas decisoes. As cotacoes
+			sao obtidas diretamente do google finance enquanto que os indicadores proveem de uma api customizada.
+		</li>
+		<li>
+			Os ativos serao automaticamente ordenados de acordo com sua atual porcentagem de alocacao em cada categoria. Assim, os ativos mais desvalorizados 
+			(portanto os proximos alvos de aportes) serao colocados no topo. A abordagem a ser seguida consiste de 2 etapas: checar a alocacao macro na aba "VISAO
+			GERAL" para decidir em qual classe de ativo aportar e, depois, olhar na aba da classe correspondente para escolher o ativo.
+		</li>
+		<li>
+			A planilha tambem suporta o conceito de quarentena de ativos. As 3 abas de ativos (FIIs, Acoes Nacionais e Acoes Internacionais) possuem um checkbox
+			na coluna nomeada "Q" que causa o ativo a ser desconsiderado nos calculos de aportes. Util em casos em que uma empresa perde fundamentos ou apresenta maus 
+			resultados seguidos e se deseja parar de aportar por um periodo.
+		</li>
+		<li>
+			Duas abas adicionais servem como auxiliares na decisa de aporte: <a href="#historico"> HISTORICO </a> e <a href="#resultados"> RESULTADOS </a>. HISTORICO
+			contem as variacoes de cotacoes em 30,60,120 e 360 dias, bem como o potencial de UPSIDE e o ultimo aporte. A planilha ainda nao previne o aporte multiplo
+			em um ativo que cai constantemente, portando esses dados evitam o "cultivo de erva daninha".
+		</li>
+	</ul>
+	
+	<hr/>
+	<p> <font size="5"> ABAS </font> </p>
+
+	<ul>
+      <li><a id="visao_geral">VISAO GERAL </a></li>
+      <ul>
+          <li>Macro alocacao da carteira</li>
+          <li>
+            Entre com os percentuais na linha 3 (META) e possiveis fundos. Ao fazer um aporte, entre com o valor no campo
+            aporte e a planilha calculara o quanto voce deveria conter em cada categoria.
+          </li>
+          <li>
+            As cores representam a acao necessaria (aumentar, diminuir ou montante OK). O montante e considerado OK
+            sempre que estiver 10% acima ou abaixo do valor ideal.
+          </li>
+          <li>
+			Mask checkbox escondera todos os montantes, de todas as abas.
+          </li>
+      </ul>
+    </ul>
+
+    <ul>
+      <li><a id="fiis">FIIs</a></li>
+      <ul>
+          <li>Fundos imobiliarios</li>
+		  <li>
+			O cadastro, por enquanto, e manual. Simplesmente inclua uma nova linha copiando e colando um ativo existente e preencha as colunas ticker, SEG, 
+			ADM VACAN e ATIVOS e, obviamente, a nota desejada. Em ATUAL, entre com o numero de cotas vezes a cotacao atual em C3 (ex: =42*C3).
+			Selecione "Atualizar dados" no meu Investimentos para atualizar os indicadores.
+		  </li>
+		  <li>
+			Outros dados que podem ser adicionados sao o "APORTE", que automaticamente recalculara o quanto cada ativo deveria ter depois do aporte, "# DIAS" que
+			influencia o quanto o grafico pra cada ativo olhara no passado e, finalmente, a TAXA SELIC e IR, usados para calcular o quanto o fundo entrega em relacao
+			a renda fixa com o DY atual do mesmo.
+		  </li>
+		  <li>
+			A coluna "P" calculara o retorno esperado em proventos do fundo com o DY e valores atuais. O valor total sera somado e representa o total de proventos
+			esperados para a categoria FIIs como um todo.
+		  </li>
+		  <li>
+			A coluna % representa o percentual do ativo em relacao a categoria dos FIIs.
+		  </li>
+		  <li>
+			A coluna % G representa o percentual do ativo em relacao a carteira como um todo. Util para identificar se um ativo em particular representa uma 
+			fatia muito grande do montante da carteira.
+		  </li>
+		  <li>
+			Clique no botao "ORDENAR" ou selecione o menu "Investimentos->Fundos Imobiliarios->Ordenar" para deixar os ativos atrasados em destaque.
+		  </li>
+      </ul>
+	 
+    </ul>
+
+    <ul>
+      <li><a id="acoesnac">ACOES NAC</a></li>
+      <ul>
+          <li>Acoes e ETFs nacionais</li>
+		  <li>
+			O cadastro, por enquanto, e manual. Simplesmente inclua uma nova linha copiando e colando um ativo existente e preencha as colunas ticker, SEG, 
+		    e, obviamente, a nota desejada. Em ATUAL, entre com o numero de cotas vezes a cotacao atual em C3 (ex: =42*C4).
+			Selecione "Atualizar dados" no meu Investimentos para atualizar os indicadores.
+		  </li>
+		  <li>
+			Outros dados que podem ser adicionados sao o "APORTE", que automaticamente recalculara o quanto cada ativo deveria ter depois do aporte, "# DIAS" que
+			influencia o quanto o grafico pra cada ativo olhara no passado e, finalmente, "CORRETAGEM" (caso se aplique).
+		  </li>
+		  <li>
+			A coluna % representa o percentual do ativo em relacao a categoria de Acoes e ETFs nacionais.
+		  </li>
+		  <li>
+			A coluna % G representa o percentual do ativo em relacao a carteira como um todo. Util para identificar se um ativo em particular representa uma 
+			fatia muito grande do montante da carteira.
+		  </li>
+		  <li>
+			Existem 2 categorias de ativos: Large Caps and Small Caps. Embora essa classificacao seja arbitraria, se torna util para controle de riscos da carteira.
+		  </li>
+		  <li>
+			A coluna "C" contem uma classificacao da empresa em 3 categorias: L (large cap), S (small cap), D (dividendos) e C (crescimento). Um grafico sera
+			exibido com a porcentagem em cada categoria para ajudar a manter a carteira diversificada entre as categorias acima listadas.
+		  </li>
+		  <li>
+			A coluna "CONSENSO" contem o consenso de mercado em 3 categorias: C (comprar), M (manter) e V (vender) e atualmente e manualmente preenchida.
+			Caso nao deseje levar em conta essa coluna, pode-se oculta-la. Nao delete a coluna porque isso ira quebrar os scripts existentes.
+		  </li>
+		  <li>
+			Clique no botao "ORDENAR" ou selecione o menu "Investimentos->Acoes Nacionais->Ordenar" para deixar os ativos atrasados em destaque.
+		  </li>
+      </ul>
+    </ul>
+
+    <ul>
+      <li><a id="acoesint">ACOES INT</a></li>
+      <ul>
+          <li>Stocks e BDRs</li>
+		  <li>
+			O cadastro, por enquanto, e manual. Simplesmente inclua uma nova linha copiando e colando um ativo existente e preencha as colunas ticker, SEG, 
+		    e, obviamente, a nota desejada. Em ATUAL, entre com o numero de cotas vezes a cotacao atual em C3 (ex: =42*C4).
+		  </li>
+		  <li>
+			Outros dados que podem ser adicionados sao o "APORTE", que automaticamente recalculara o quanto cada ativo deveria ter depois do aporte, "# DIAS" que
+			influencia o quanto o grafico pra cada ativo olhara no passado e, finalmente, "CORRETAGEM" (caso se aplique).
+		  </li>
+		  <li>
+			A coluna % representa o percentual do ativo em relacao a categoria de Acoes e ETFs nacionais.
+		  </li>
+		  <li>
+			A coluna % G representa o percentual do ativo em relacao a carteira como um todo. Util para identificar se um ativo em particular representa uma 
+			fatia muito grande do montante da carteira.
+		  </li>
+		  <li>
+			Clique no botao "ORDENAR" ou selecione o menu "Investimentos->Acoes Internacionais->Ordenar" para deixar os ativos atrasados em destaque.
+		  </li>
+      </ul>
+    </ul>
+
+    <ul>
+      <li><a id="historico">HISTORICO</a></li>
+      <ul>
+          <li>Historico de cotacoes e media da notas</li>
+		  <li>
+			Serve como suporte a dados historicos para ajudar na decisao de aportes e/ou inclusao de novos ativos.
+		  </li>
+		  <li>
+			Mostra a variacao historica da cota de ativos nos ultimos 30,60,120 e 360 dias.
+		  </li>
+		  <li>
+			Possibilita a ordenacao a partir de varios dados, como: DATA APORTE, UPSIDE, e variacao da cota 30/60/120/360. Os valores de preco justo e ultimo
+			aporte devem ser preenchidos de acordo. Exceto para os FIIs, cujo valor justo eh calculado automaticamente baseado no valor patrimonial.
+		  </li>
+		  
+      </ul>
+	  
+    </ul>
+
+    <hr/>
+	
+	<p><a id="todolist">TODO LIST</a></p>
+    <ol>
+      <li>Reduzir loading time e recalculation.</li>
+	  <li>Buscar preco e indicadores faltantes da api stockfundamentus.</li>
+	  <li>Adicionar suporte a indicadores de reits e stocks na api stockfundamentus.</li>
+	  <li>Automatizar a adicao e remocao de ativos.</li>
+	  <li>Automatizar a compra ou venda de ativos.</li>
+	  <li>Adicionar uma aba para criptomoedas.</li>
+	  <li>Possivel integracao com o CEI.</li>
+    </ol>
+	
+	<hr/>
+	
+	<p><a id="fundamentus">FUNDAMENTUS API</a></p>
+	<p> <a href="https://github.com/pr3st00/fundamentus">Github Project</a> </p>
+
+	<hr/>
+	
+	<p><a id="contato">CONTATO</a></p>
+	<p> Fernando Costa de Almeida <a href="mailto:fernando.c.almeida@gmail.com">(fernando.c.almeida@gmail.com)</a> </p>
+
+	<hr/>
+	
+  </div>
+</body>
+  <script>
+    function autoClose() {
+      google.script.host.close();
+    }
+  </script>
+</html>
+
