@@ -15,9 +15,9 @@ function onOpen() {
 }
 
 function showSplashScreen() {
-  showScreen("Splash", "Controle de Investimentos",250,500);
+  showScreen("Splash", "Controle de Investimentos", 250, 500);
 }
 
 function showHelpScreen() {
-  showScreen("Help", "Ajuda",500,800);
+  showScreen("Help", "Ajuda", 500, 800);
 }
