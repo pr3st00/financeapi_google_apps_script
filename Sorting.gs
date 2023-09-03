@@ -2,41 +2,51 @@
  *  Sorting functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 09/25/2021
+ *  LastM : 02/09/2023
  * 
- * */ 
+ * */
 
 function sortAll() {
   sortFiis();
   sortBrStocks();
   sortNonBrStocks();
+  sortCrypto();
   sortHistory();
+
+  SpreadsheetApp.getUi().alert("DADOS ORGANIZADOS");
 }
 
-function sortBrStocks() {
+function sortBrStocks(showMessage) {
   var ini = firstStockRow;
-  var end = firstStockRow + getNumberOfLargeCaps() - 1;
+  var end = ini + getNumberOfLargeCaps() - 1;
 
-  sortRange(stocksSheetName, 19,"A"+ini+":S"+end,false);
+  sortRange(stocksSheetName, 19, "A" + ini + ":S" + end, showMessage);
 
   ini = ini + 3;
   end = ini + getNumberOfSmallCaps() - 1;
 
-  sortRange(stocksSheetName, 19,"A"+ini+":S"+end, true);
+  sortRange(stocksSheetName, 19, "A" + ini + ":S" + end, showMessage);
 }
 
-function sortNonBrStocks() {
-  var ini = firstStockRow;
-  var end = firstStockRow + getNumberOfIntStocks() - 1;
+function sortNonBrStocks(showMessage) {
+  var ini = firstStockRow - 1;
+  var end = ini + getNumberOfIntStocks() - 1;
 
-  sortRange(intStocksSheetName,19,"A"+ini+":S"+end,true);
+  sortRange(intStocksSheetName, 19, "A" + ini + ":S" + end, showMessage);
 }
 
-function sortFiis() {
+function sortFiis(showMessage) {
   var ini = firstFiiRow;
-  var end = firstFiiRow + getNumberOfFiis() - 1;
-  
-  sortRange(fiisSheetName,19,"A"+ini+":S"+end,true);
+  var end = ini + getNumberOfFiis() - 1;
+
+  sortRange(fiisSheetName, 19, "A" + ini + ":S" + end, showMessage);
+}
+
+function sortCrypto(showMessage) {
+  var ini = firstCryptoRow;
+  var end = ini + getNumberOfCrypto() - 1;
+
+  sortRange(cryptoSheetName, 11, "A" + ini + ":K" + end, showMessage);
 }
 
 function sortHistory() {
@@ -47,9 +57,8 @@ function sortHistory() {
   var initialColumn = 4;
 
   if (DEBUG) ui.alert(orderByCell.getValue());
-  
-  switch (orderByCell.getValue()) 
-  {
+
+  switch (orderByCell.getValue()) {
     case 30:
       columnToSortBy = initialColumn + 4;
       break;
@@ -73,25 +82,26 @@ function sortHistory() {
   var ini = 0;
   var end = 1;
 
-  for (i=0; i<numberOfRanges; i++) {
+  for (i = 0; i < numberOfRanges; i++) {
     ini = end + 2;
-    end = ini + getNumberOfTickers(historicalSheetName, ini)  - 1;
+    end = ini + getNumberOfTickers(historicalSheetName, ini, stockRegex) - 1;
 
-    sortRange(historicalSheetName, columnToSortBy,"A"+ini+":K"+end , false);
+    sortRange(historicalSheetName, columnToSortBy, "A" + ini + ":K" + end, false);
   }
-  
+
 }
 
-function sortRange(sheetName, columnToSortBy,tableRange,showMessage) {
+function sortRange(sheetName, columnToSortBy, tableRange, showMessage) {
   var sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
   var editedCell = sheet.getActiveCell();
   var ui = SpreadsheetApp.getUi();
-  
+
   var range = sheet.getRange(tableRange);
-  range.sort( { column : columnToSortBy, ascending: false } );
- 
-  if (showMessage)
-  {
+  range.sort({ column: columnToSortBy, ascending: false });
+
+  debug("ShetName=" + sheetName + ", columnToSortBy=" + columnToSortBy + ", tableRange=" + tableRange + ", showMessage=" + showMessage);
+
+  if (showMessage) {
     ui.alert("DADOS ORGANIZADOS");
   }
 }
