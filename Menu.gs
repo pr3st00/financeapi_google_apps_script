@@ -2,7 +2,7 @@
  *  Menu related functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 12/06/2022
+ *  LastM : 03/12/2023
  * 
  * */
 
@@ -23,6 +23,9 @@ function addMenus() {
     .addSubMenu(ui.createMenu('Acoes Internacionais')
       .addItem('Ordenar', 'sortNonBrStocks')
       .addItem('Mostrar somente ativos', 'hideZeroIntStocks')
+    )
+    .addSubMenu(ui.createMenu('Cryptoativos')
+      .addItem('Ordenar', 'sortCrypto')
     )
     .addSeparator()
     .addItem('Ajuda', 'showHelpScreen')
