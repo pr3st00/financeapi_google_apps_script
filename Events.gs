@@ -14,6 +14,13 @@ function onOpen() {
   }
 }
 
+function onEdit(e) {
+  var sheet = SpreadsheetApp.getActive().getSheetByName("CONTROLE");
+  var lastModifiedCell = sheet.getRange("B2");
+
+  lastModifiedCell.setValue(new Date());
+}
+
 function showSplashScreen() {
   showScreen("Splash", "Controle de Investimentos", 250, 500);
 }
