@@ -2,18 +2,21 @@
  *  Sorting functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 02/09/2023
+ *  LastM : 10/01/2024
  * 
  * */
 
 function sortAll() {
+
+  showProgressDialog('Sorting data');
+  
   sortFiis();
   sortBrStocks();
   sortNonBrStocks();
   sortCrypto();
   sortHistory();
 
-  SpreadsheetApp.getUi().alert("DADOS ORGANIZADOS");
+  closeProgressDialog();
 }
 
 function sortBrStocks(showMessage) {
