@@ -2,11 +2,13 @@
  *  Data retrieving functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 12/06/2022
+ *  LastM : 02/12/2023
  * 
  * */
 
 function updateAllIndicators() {
+  showProgressDialog('Updating indicators');
+
   var lastFiiRow = firstFiiRow + getNumberOfFiis() - 1;
   var lastLargeCapRow = firstStockRow + getNumberOfLargeCaps() - 1;
   var firstSmallCapRow = lastLargeCapRow + 3;
@@ -15,6 +17,8 @@ function updateAllIndicators() {
   updateFiiIndicators(firstFiiRow, lastFiiRow);
   updateStockIndicators(firstStockRow, lastLargeCapRow);
   updateStockIndicators(firstSmallCapRow, lastSmallCapRow);
+
+  closeProgressDialog();
 }
 
 function getIndicator(ticker, indicator, type) {
@@ -62,6 +66,7 @@ function updateFiiIndicators(ini, end) {
     var pvpCell = sheet.getRange("F" + i);
     var dyCell = sheet.getRange("G" + i);
     var segCell = sheet.getRange("D" + i);
+    var vacCell = sheet.getRange("J" + i);
     var propCell = sheet.getRange("K" + i);
 
     debug(ticker);
@@ -69,6 +74,7 @@ function updateFiiIndicators(ini, end) {
     pvpCell.setValue(getData(data, "pvp"));
     dyCell.setValue(getData(data, "dy"));
     segCell.setValue(getData(data, "sector").toUpperCase());
+    vacCell.setValue(getData(data, "vacancy"));
     propCell.setValue(getData(data, "properties"));
 
     i++;
