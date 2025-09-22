@@ -2,84 +2,258 @@
  *  Sorting functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 10/01/2024
+ *  LastM : 19/09/2025
  * 
  * */
 
+/**
+ * Sorts everything based on the default sorting columns
+ */
 function sortAll() {
 
-  showProgressDialog('Sorting data');
-  
-  sortFiis();
-  sortBrStocks();
-  sortNonBrStocks();
-  sortCrypto();
+  showProgressDialog('Ordenandos ativos');
+
+  sortFiisByDefault();
+  sortBrStocksByDefault();
+  sortNonBrStocksByDefault();
+  sortCryptoByDefault();
   sortHistory();
 
   closeProgressDialog();
 }
 
-function sortBrStocks(showMessage) {
+/**
+ * 1. Br stocks
+ */
+
+/**
+ * Sort br-stocks
+ * 
+ * @param showMessage 
+ * @param columnToSortBy
+ * @param ascending
+ */
+function sortBrStocks(showMessage, columnToSortBy, ascending) {
   var ini = firstStockRow;
   var end = ini + getNumberOfLargeCaps() - 1;
+  var sortBy = columnToSortBy ? columnToSortBy : stockDefaultSortColumn;
 
-  sortRange(stocksSheetName, 19, "A" + ini + ":S" + end, showMessage);
+  sortRange(stocksSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 
-  ini = ini + 3;
+  ini = end + 2;
   end = ini + getNumberOfSmallCaps() - 1;
 
-  sortRange(stocksSheetName, 19, "A" + ini + ":S" + end, showMessage);
+  sortRange(stocksSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 }
 
-function sortNonBrStocks(showMessage) {
+/**
+ * Sorts br-stocks based on the current selected column 
+ */
+function sortBrStocksByCurrentColumn() {
+  sortBrStocks(false, getActiveColumnNumber());
+}
+
+/**
+ * Sorts br-stocks based on default column
+ */
+function sortBrStocksByDefault() {
+  sortBrStocks(false, brStockDefaultSortColumn, false);
+}
+
+function sortBrStocksByTicker() {
+  sortBrStocks(false, 1, true);
+}
+
+function sortBrStocksByPl() {
+  sortBrStocks(false, 5, true);
+}
+
+function sortBrStocksByPvp() {
+  sortBrStocks(false, 6, true);
+}
+
+function sortBrStocksByDy() {
+  sortBrStocks(false, 7, false);
+}
+
+function sortBrStocksByLpa() {
+  sortBrStocks(false, 10, false);
+}
+
+function sortBrStocksByPat() {
+  sortBrStocks(false, 18, false);
+}
+
+/**
+ * 2. Non-br stocks
+ */
+
+/**
+ * Sorts non-BR stocks
+ * 
+ * @param showMessage 
+ * @param columnToSortBy
+ * @param ascending
+ */
+function sortNonBrStocks(showMessage, columnToSortBy, ascending) {
   var ini = firstStockRow - 1;
   var end = ini + getNumberOfIntStocks() - 1;
+  var sortBy = columnToSortBy ? columnToSortBy : nonBrStockDefaultSortColumn;
 
-  sortRange(intStocksSheetName, 19, "A" + ini + ":S" + end, showMessage);
+  sortRange(intStocksSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 }
 
-function sortFiis(showMessage) {
+/**
+ * Sorts non-BR stocks based on the current selected column 
+ */
+function sortNonBrStocksByCurrentColumn() {
+  sortNonBrStocks(false, getActiveColumnNumber());
+}
+
+/**
+ * Sorts non-br-stocks based on default column
+ */
+function sortNonBrStocksByDefault() {
+  sortNonBrStocks(false, nonBrStockDefaultSortColumn, false);
+}
+
+function sortNonBrStocksByTicker() {
+  sortNonBrStocks(false, 1, true);
+}
+
+/**
+ * 3. FIIs
+ */
+
+/**
+ * Sorts FIIs
+ * 
+ * @param showMessage 
+ * @param columnToSortBy
+ * @param ascending
+ */
+function sortFiis(showMessage, columnToSortBy, ascending) {
   var ini = firstFiiRow;
   var end = ini + getNumberOfFiis() - 1;
+  var sortBy = columnToSortBy ? columnToSortBy : fiiDefaultSortColumn;
 
-  sortRange(fiisSheetName, 19, "A" + ini + ":S" + end, showMessage);
+  sortRange(fiisSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 }
 
-function sortCrypto(showMessage) {
+/**
+ * Sorts FIIs based on the current selected column 
+ */
+function sortFiisByCurrentColumn() {
+  sortFiis(false, getActiveColumnNumber());
+}
+
+/**
+ * Sorts FIIs based on default column
+ */
+function sortFiisByDefault() {
+  sortFiis(false, fiiDefaultSortColumn, false);
+}
+
+function sortFiisByTicker() {
+  sortFiis(false, 1, true);
+}
+
+function sortFiisByPvp() {
+  sortFiis(false, 6, true);
+}
+
+function sortFiisByDy() {
+  sortFiis(false, 7, false);
+}
+
+function sortFiisByIncome() {
+  sortFiis(false, 14, false);
+}
+
+function sortFiisByPat() {
+  sortFiis(false, 18, false);
+}
+
+/**
+ * 4. Cryptos
+ */
+
+/**
+ * Sorts Crypto
+ * 
+ * @param showMessage 
+ * @param columnToSortBy
+ */
+function sortCrypto(showMessage, columnToSortBy, ascending) {
   var ini = firstCryptoRow;
   var end = ini + getNumberOfCrypto() - 1;
+  var sortBy = columnToSortBy ? columnToSortBy : cryptoDefaultSortColumn;
 
-  sortRange(cryptoSheetName, 11, "A" + ini + ":K" + end, showMessage);
+  sortRange(cryptoSheetName, sortBy, "A" + ini + ":L" + end, showMessage, ascending);
 }
 
+/**
+ * Sorts crypto based on the current selected column
+ */
+function sortCryptoByCurrentColumn() {
+  sortCrypto(false, getActiveColumnNumber());
+}
+
+/**
+ * Sorts crypto based on default column
+ */
+function sortCryptoByDefault() {
+  sortCrypto(false, cryptoDefaultSortColumn, false);
+}
+
+function sortCryptoByTicker() {
+  sortCrypto(false, 1, true);
+}
+
+/**
+ * 5. Historical data
+ */
+
+/**
+ * Sorts historical data
+ */
 function sortHistory() {
   var sheet = SpreadsheetApp.getActive().getSheetByName(historicalSheetName);
-  var orderByCell = sheet.getRange("M7");
   var ui = SpreadsheetApp.getUi();
   var columnToSortBy;
-  var initialColumn = 4;
 
-  if (DEBUG) ui.alert(orderByCell.getValue());
+  // The three variables below controls all the sorting data
+  var orderByCell = sheet.getRange("P7");
+  var initialColumn = 4; // Rent column number
+  var ascending = sheet.getRange("P9").getValue();
 
   switch (orderByCell.getValue()) {
-    case 30:
-      columnToSortBy = initialColumn + 4;
-      break;
-    case 60:
-      columnToSortBy = initialColumn + 5;
-      break;
-    case 120:
-      columnToSortBy = initialColumn + 6;
-      break;
-    case "UPSIDE":
+    case "RENT":
       columnToSortBy = initialColumn;
       break;
-    case "APORTE":
+    case "UPSIDE":
       columnToSortBy = initialColumn + 2;
       break;
-    default:
+    case "APORTE":
+      columnToSortBy = initialColumn + 5;
+      break;
+    case 30:
       columnToSortBy = initialColumn + 7;
+      break;
+    case 60:
+      columnToSortBy = initialColumn + 8;
+      break;
+    case 120:
+      columnToSortBy = initialColumn + 9;
+      break;
+    case 360:
+      columnToSortBy = initialColumn + 10;
+      break;
+    default:
+      columnToSortBy = initialColumn;
   }
+
+  debug(orderByCell.getValue() + " - " + columnToSortBy);
 
   var numberOfRanges = 3;
   var ini = 0;
@@ -89,20 +263,28 @@ function sortHistory() {
     ini = end + 2;
     end = ini + getNumberOfTickers(historicalSheetName, ini, stockRegex) - 1;
 
-    sortRange(historicalSheetName, columnToSortBy, "A" + ini + ":K" + end, false);
+    sortRange(historicalSheetName, columnToSortBy, "A" + ini + ":O" + end, false, ascending);
   }
-
 }
 
-function sortRange(sheetName, columnToSortBy, tableRange, showMessage) {
+/**
+ * Generic sorting function
+ * 
+ * @param sheetName
+ * @param columnToSortBy
+ * @param tableRange
+ * @param showMessage
+ * @param ascending
+ */
+function sortRange(sheetName, columnToSortBy, tableRange, showMessage, ascending) {
   var sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
   var editedCell = sheet.getActiveCell();
   var ui = SpreadsheetApp.getUi();
 
-  var range = sheet.getRange(tableRange);
-  range.sort({ column: columnToSortBy, ascending: false });
-
   debug("ShetName=" + sheetName + ", columnToSortBy=" + columnToSortBy + ", tableRange=" + tableRange + ", showMessage=" + showMessage);
+
+  var range = sheet.getRange(tableRange);
+  range.sort({ column: columnToSortBy, ascending: ascending });
 
   if (showMessage) {
     ui.alert("DADOS ORGANIZADOS");
