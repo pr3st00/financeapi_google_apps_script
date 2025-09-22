@@ -2,7 +2,7 @@
  *  Utilities
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 11/01/2024
+ *  LastM : 22/09/2025
  * 
  * */
 
@@ -17,28 +17,30 @@ var dialogHeight = 100;
 var dialogCloseDelay = 2 * 1000;
 
 function debug(mesg) {
-  if (DEBUG) Logger.log(mesg);
+  if (DEBUG) {
+    Logger.log(mesg);
+  }
 }
 
 function getNumberOfFiis() {
-  return getNumberOfTickers(fiisSheetName, 2, fiiRegex);
+  return getNumberOfTickers(fiisSheetName, firstFiiRow, fiiRegex);
 }
 
 function getNumberOfLargeCaps() {
-  return getNumberOfTickers(stocksSheetName, 3, stockRegex);
+  return getNumberOfTickers(stocksSheetName, firstStockRow, stockRegex);
 }
 
 function getNumberOfSmallCaps() {
-  var ini = getNumberOfLargeCaps() + 2 + 3;
+  var ini = getNumberOfLargeCaps() + 2 + 2;
   return getNumberOfTickers(stocksSheetName, ini, stockRegex);
 }
 
 function getNumberOfIntStocks() {
-  return getNumberOfTickers(intStocksSheetName, 3, stockRegex);
+  return getNumberOfTickers(intStocksSheetName, firstNonBrStockRow, stockRegex);
 }
 
 function getNumberOfCrypto() {
-  return getNumberOfTickers(cryptoSheetName, 2, cryptoRegex);
+  return getNumberOfTickers(cryptoSheetName, firstCryptoRow, cryptoRegex);
 }
 
 function getNumberOfTickers(sheetName, ini, regex) {
@@ -89,16 +91,26 @@ function hideZeroFromFilter(sheetName, filterColumnName, filterColumnNumber) {
   spreadsheet.getFilter().setColumnFilterCriteria(filterColumnNumber, criteria);
 }
 
-function showProgressDialog(title) {
+function showProgressDialog(mesg) {
   var html = "<center><iframe src=" + loadingGif + " width=50 height=50 frameBorder=0></iframe></center>";
   var htmlOutput = HtmlService.createHtmlOutput(html).setWidth(dialogWidth).setHeight(dialogHeight);
   
-  SpreadsheetApp.getUi().showModelessDialog(htmlOutput, title);
+  //SpreadsheetApp.getUi().showModelessDialog(htmlOutput, title);
+  SpreadsheetApp.getActive().toast(mesg, "- INFO -", 100);
 }
 
 function closeProgressDialog() {
   var html = "<script>setTimeout(google.script.host.close(), " + dialogCloseDelay + ");</script>";
   var htmlOutput = HtmlService.createHtmlOutput(html).setWidth(dialogWidth).setHeight(dialogHeight);
   
-  SpreadsheetApp.getUi().showModelessDialog(htmlOutput, 'Completed');
+  //SpreadsheetApp.getUi().showModelessDialog(htmlOutput, 'Completo');
+  SpreadsheetApp.getActive().toast("Completo", "- INFO -", 3);
 }
+
+function getActiveColumnNumber() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const activeColumnNumber = sheet.getActiveRange().getColumn();
+  return activeColumnNumber;
+}
+
+// EOF
