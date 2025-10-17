@@ -41,3 +41,5 @@ function showScreen(fileName, title, height, width) {
   SpreadsheetApp.getUi()
     .showModalDialog(splashScreen, title);
 }
+
+// EOF

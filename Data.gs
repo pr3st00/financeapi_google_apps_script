@@ -2,16 +2,29 @@
  *  Data retrieving functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 02/12/2023
+ *  LastM : 20/06/2024
  * 
  * */
 
+function callFundamentusApi(type, ticker) {
+  var url = stockfundamentusUrl + "/" + type + "/" + ticker;
+  
+  debug("Calling Fundamentus service: " + url);
+  
+  try {
+    return JSON.parse(UrlFetchApp.fetch(url));
+  } catch (e) {
+      Logger.log("Error calling fundamentus service : " + e.message);
+      return JSON.parse("{}");
+  }
+}
+
 function updateAllIndicators() {
-  showProgressDialog('Updating indicators');
+  showProgressDialog('Atualizando dados');
 
   var lastFiiRow = firstFiiRow + getNumberOfFiis() - 1;
   var lastLargeCapRow = firstStockRow + getNumberOfLargeCaps() - 1;
-  var firstSmallCapRow = lastLargeCapRow + 3;
+  var firstSmallCapRow = lastLargeCapRow + 2;
   var lastSmallCapRow = firstSmallCapRow + getNumberOfSmallCaps() - 1;
 
   updateFiiIndicators(firstFiiRow, lastFiiRow);
@@ -22,12 +35,7 @@ function updateAllIndicators() {
 }
 
 function getIndicator(ticker, indicator, type) {
-  var url = stockfundamentusUrl + "/" + type + "?ticker=" + ticker;
-
-  debug("Calling Fundamentus service: " + url);
-
-  var data = JSON.parse(UrlFetchApp.fetch(url));
-
+  var data = callFundamentusApi(type, ticker);  
   return getData(data, indicator);
 }
 
@@ -39,9 +47,9 @@ function getStockIndicator(ticker, indicator) {
   return getIndicator(ticker, indicator, "stock");
 }
 
-function getData(data, indicator) {
-  var value = data[indicator];
-  var convertToPercent = ["dy", "roe", "roic"];
+function getData(data, indicator, defaultValue) {
+  var value = data[indicator] != '' ? data[indicator]: defaultValue;
+  var convertToPercent = ["dy", "roe", "roic", "tax"];
   var stringElements = ["ticker", "sector", "properties"];
 
   debug("Indicator: [" + indicator + "], Value: [" + value + "]");
@@ -57,25 +65,34 @@ function updateFiiIndicators(ini, end) {
   var sheet = SpreadsheetApp.getActive().getSheetByName(fiisSheetName);
   var tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
   var i = ini;
-  var baseUrl = stockfundamentusUrl;
 
   tickers.forEach(function (ticker) {
-    var url = baseUrl + "/fii?ticker=" + ticker;
-    var data = JSON.parse(UrlFetchApp.fetch(url));
-
+  
     var pvpCell = sheet.getRange("F" + i);
     var dyCell = sheet.getRange("G" + i);
     var segCell = sheet.getRange("D" + i);
     var vacCell = sheet.getRange("J" + i);
     var propCell = sheet.getRange("K" + i);
+    var taxCell = sheet.getRange("I" + i);
 
     debug(ticker);
 
-    pvpCell.setValue(getData(data, "pvp"));
-    dyCell.setValue(getData(data, "dy"));
-    segCell.setValue(getData(data, "sector").toUpperCase());
-    vacCell.setValue(getData(data, "vacancy"));
-    propCell.setValue(getData(data, "properties"));
+    pvpCell.clearContent();
+    dyCell.clearContent();
+    vacCell.clearContent();
+    propCell.clearContent();
+    taxCell.clearContent();
+
+    SpreadsheetApp.flush();
+
+    var data = callFundamentusApi("fii", ticker);
+
+    pvpCell.setValue(getData(data, "pvp", 0));
+    dyCell.setValue(getData(data, "dy", 0));
+    segCell.setValue(getData(data, "sector", "NA").toUpperCase());
+    vacCell.setValue(getData(data, "vacancy", 0));
+    taxCell.setValue(getData(data, "tax", 0));
+    propCell.setValue(getData(data, "properties", "NA"));
 
     i++;
   });
@@ -86,27 +103,38 @@ function updateStockIndicators(ini, end) {
   var sheet = SpreadsheetApp.getActive().getSheetByName(stocksSheetName);
   var tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
   var i = ini;
-  var baseUrl = stockfundamentusUrl;
 
   tickers.forEach(function (ticker) {
-    var url = baseUrl + "/stock?ticker=" + ticker;
-    var data = JSON.parse(UrlFetchApp.fetch(url));
+ 
+   var plCell = sheet.getRange("E" + i);
+   var pvpCell = sheet.getRange("F" + i);
+   var dyCell = sheet.getRange("G" + i);
+   var roicCell = sheet.getRange("H" + i);
+   var eveCell = sheet.getRange("I" + i);
+   var lpaCell = sheet.getRange("J" + i);
 
-    var pvpCell = sheet.getRange("F" + i);
-    var dyCell = sheet.getRange("G" + i);
-    var roicCell = sheet.getRange("H" + i);
-    var eveCell = sheet.getRange("I" + i);
-    var lpaCell = sheet.getRange("J" + i);
+   debug(ticker);
 
-    debug(ticker);
+   plCell.clearContent();
+   pvpCell.clearContent();
+   dyCell.clearContent();
+   roicCell.clearContent();
+   eveCell.clearContent();
+   lpaCell.clearContent();
 
-    pvpCell.setValue(getData(data, "pvp"));
-    dyCell.setValue(getData(data, "dy"));
-    roicCell.setValue(getData(data, "roic"));
-    eveCell.setValue(getData(data, "eve"));
-    lpaCell.setValue(getData(data, "lpa"));
+   SpreadsheetApp.flush();
 
-    i++;
+   var data = callFundamentusApi("stock", ticker);
+
+   plCell.setValue(getData(data, "pl", 0));
+   pvpCell.setValue(getData(data, "pvp", 0));
+   dyCell.setValue(getData(data, "dy", 0));
+   roicCell.setValue(getData(data, "roic", 0));
+   eveCell.setValue(getData(data, "eve", 0));
+   lpaCell.setValue(getData(data, "lpa", 0));
+
+   i++;
   });
-
 }
+
+// EOF

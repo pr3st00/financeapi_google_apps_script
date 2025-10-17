@@ -290,3 +290,5 @@ function sortRange(sheetName, columnToSortBy, tableRange, showMessage, ascending
     ui.alert("DADOS ORGANIZADOS");
   }
 }
+
+// EOF

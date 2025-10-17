@@ -20,5 +20,7 @@ function test() {
 
   Logger.log("Now updating all indicators...");
 
-  updateAllIndicators();
+  //updateAllIndicators();
 }
+
+// EOF

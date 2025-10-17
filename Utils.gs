@@ -1,20 +1,10 @@
 /**
- *  Utilities
+ *  General Utilities
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 22/09/2025
+ *  LastM : 13/10/2025
  * 
  * */
-
-var stockRegex = /^[A-Z,a-z,0-9]+[0-9]+$/;
-var fiiRegex = /^[A-Z,a-z,0-9]+[0-9]+$/;
-var cryptoRegex = /^[A-Z,a-z]+$/;
-
-// Dialog parameters
-var loadingGif = "https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif";
-var dialogWidth = 200;
-var dialogHeight = 100;
-var dialogCloseDelay = 2 * 1000;
 
 function debug(mesg) {
   if (DEBUG) {
@@ -111,6 +101,38 @@ function getActiveColumnNumber() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   const activeColumnNumber = sheet.getActiveRange().getColumn();
   return activeColumnNumber;
+}
+
+function alert(message) {
+  SpreadsheetApp.getUi().alert(message);
+}
+
+function readValue(title, message) {
+  var ui = SpreadsheetApp.getUi();
+
+  var response = ui.prompt(
+    title, 
+    message, 
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  if (response.getSelectedButton() == ui.Button.OK) {
+    return response.getResponseText();
+  } else  {
+    return null;
+  }
+}
+
+function confirm(title, message) {
+  var ui = SpreadsheetApp.getUi();
+  
+  var response = ui.alert(
+    title,
+    message,
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  return response == ui.Button.OK;
 }
 
 // EOF

@@ -2,7 +2,7 @@
  *  Events functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 12/06/2022
+ *  LastM : 01/06/2024
  * 
  * */
 
@@ -11,6 +11,10 @@ function onOpen() {
 
   if (LOAD_INDICATORS_ON_OPEN) {
     updateAllIndicators();
+  }
+
+  if (SORT_ALL_ON_OPEN) {
+    sortAll();
   }
 }
 
@@ -28,3 +32,5 @@ function showSplashScreen() {
 function showHelpScreen() {
   showScreen("Help", "Ajuda", 500, 800);
 }
+
+// EOF
