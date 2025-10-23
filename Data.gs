@@ -2,25 +2,37 @@
  *  Data retrieving functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 20/06/2024
+ *  LastM : 20/10/2025
  * 
  * */
 
+const SUCCESS = 200;
+const OPTIONS = { 'muteHttpExceptions': true };
+
 function callFundamentusApi(type, ticker) {
   var url = stockfundamentusUrl + "/" + type + "/" + ticker;
-  
+
   debug("Calling Fundamentus service: " + url);
-  
+
   try {
-    return JSON.parse(UrlFetchApp.fetch(url));
+    var response = UrlFetchApp.fetch(url, OPTIONS);
+    var responseBody = response.getContentText();
+
+    if (response.getResponseCode() === SUCCESS) {
+      return JSON.parse(responseBody);
+    } else {
+      alert(ticker + "\n\n" + responseBody);
+      return null;
+    }
   } catch (e) {
-      Logger.log("Error calling fundamentus service : " + e.message);
-      return JSON.parse("{}");
+    Logger.log(getMessage("FUNDAMENTUS_ERROR_MESSAGE") + e.message);
+    alert(getMessage("FUNDAMENTUS_ERROR_MESSAGE") + e.message);
+    return null;
   }
 }
 
 function updateAllIndicators() {
-  showProgressDialog('Atualizando dados');
+  showProgressDialog(getMessage("INDICATORS_UPDATE"));
 
   var lastFiiRow = firstFiiRow + getNumberOfFiis() - 1;
   var lastLargeCapRow = firstStockRow + getNumberOfLargeCaps() - 1;
@@ -35,7 +47,7 @@ function updateAllIndicators() {
 }
 
 function getIndicator(ticker, indicator, type) {
-  var data = callFundamentusApi(type, ticker);  
+  var data = callFundamentusApi(type, ticker);
   return getData(data, indicator);
 }
 
@@ -48,7 +60,7 @@ function getStockIndicator(ticker, indicator) {
 }
 
 function getData(data, indicator, defaultValue) {
-  var value = data[indicator] != '' ? data[indicator]: defaultValue;
+  var value = data && data[indicator] ? data[indicator] : defaultValue;
   var convertToPercent = ["dy", "roe", "roic", "tax"];
   var stringElements = ["ticker", "sector", "properties"];
 
@@ -67,7 +79,7 @@ function updateFiiIndicators(ini, end) {
   var i = ini;
 
   tickers.forEach(function (ticker) {
-  
+
     var pvpCell = sheet.getRange("F" + i);
     var dyCell = sheet.getRange("G" + i);
     var segCell = sheet.getRange("D" + i);
@@ -87,6 +99,8 @@ function updateFiiIndicators(ini, end) {
 
     var data = callFundamentusApi("fii", ticker);
 
+    debug(data);
+
     pvpCell.setValue(getData(data, "pvp", 0));
     dyCell.setValue(getData(data, "dy", 0));
     segCell.setValue(getData(data, "sector", "NA").toUpperCase());
@@ -105,35 +119,35 @@ function updateStockIndicators(ini, end) {
   var i = ini;
 
   tickers.forEach(function (ticker) {
- 
-   var plCell = sheet.getRange("E" + i);
-   var pvpCell = sheet.getRange("F" + i);
-   var dyCell = sheet.getRange("G" + i);
-   var roicCell = sheet.getRange("H" + i);
-   var eveCell = sheet.getRange("I" + i);
-   var lpaCell = sheet.getRange("J" + i);
 
-   debug(ticker);
+    var plCell = sheet.getRange("E" + i);
+    var pvpCell = sheet.getRange("F" + i);
+    var dyCell = sheet.getRange("G" + i);
+    var roicCell = sheet.getRange("H" + i);
+    var eveCell = sheet.getRange("I" + i);
+    var lpaCell = sheet.getRange("J" + i);
 
-   plCell.clearContent();
-   pvpCell.clearContent();
-   dyCell.clearContent();
-   roicCell.clearContent();
-   eveCell.clearContent();
-   lpaCell.clearContent();
+    debug(ticker);
 
-   SpreadsheetApp.flush();
+    plCell.clearContent();
+    pvpCell.clearContent();
+    dyCell.clearContent();
+    roicCell.clearContent();
+    eveCell.clearContent();
+    lpaCell.clearContent();
 
-   var data = callFundamentusApi("stock", ticker);
+    SpreadsheetApp.flush();
 
-   plCell.setValue(getData(data, "pl", 0));
-   pvpCell.setValue(getData(data, "pvp", 0));
-   dyCell.setValue(getData(data, "dy", 0));
-   roicCell.setValue(getData(data, "roic", 0));
-   eveCell.setValue(getData(data, "eve", 0));
-   lpaCell.setValue(getData(data, "lpa", 0));
+    var data = callFundamentusApi("stock", ticker);
 
-   i++;
+    plCell.setValue(getData(data, "pl", 0));
+    pvpCell.setValue(getData(data, "pvp", 0));
+    dyCell.setValue(getData(data, "dy", 0));
+    roicCell.setValue(getData(data, "roic", 0));
+    eveCell.setValue(getData(data, "eve", 0));
+    lpaCell.setValue(getData(data, "lpa", 0));
+
+    i++;
   });
 }
 

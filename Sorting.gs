@@ -11,7 +11,7 @@
  */
 function sortAll() {
 
-  showProgressDialog('Ordenandos ativos');
+  showProgressDialog(getMessage("TICKER_SORTING"));
 
   sortFiisByDefault();
   sortBrStocksByDefault();

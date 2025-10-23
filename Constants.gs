@@ -2,55 +2,56 @@
  *  Constants
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 15/10/2025
+ *  LastM : 20/10/2025
  * 
  * */
 
-var VERSION = 1.8;
+const VERSION = 1.8;
 
-var DEBUG = false;
+const LANG = "pt-br";
+const DEBUG = true;
 
-var LOAD_INDICATORS_ON_OPEN = false;
-var SORT_ALL_ON_OPEN = true;
+const LOAD_INDICATORS_ON_OPEN = false;
+const SORT_ALL_ON_OPEN = true;
 
-var stockfundamentusUrls = {
+const stockfundamentusUrls = {
   "IBM"       : "https://stockfundamentus.mybluemix.net",
   "HEROKU"    : "https://stockfundamentus.herokuapp.com",
   "HOME"      : "http://prestoapis.sytes.net:8080/fundamentus",
   "ONRENDER"  : "https://fundamentus.onrender.com"
 }
 
-var stockfundamentusImpl = "HOME";
+const stockfundamentusImpl = "HOME";
 
-var stockfundamentusUrl = stockfundamentusUrls[stockfundamentusImpl];
+const stockfundamentusUrl = stockfundamentusUrls[stockfundamentusImpl];
 
 // For ticker sorting and management
-var firstFiiRow = 2;
-var firstStockRow = 3;
-var firstNonBrStockRow = 2;
-var firstCryptoRow = 2;
+const firstFiiRow = 2;
+const firstStockRow = 3;
+const firstNonBrStockRow = 2;
+const firstCryptoRow = 2;
 
-var fiiDefaultSortColumn = 19;
-var brStockDefaultSortColumn = 19;
-var nonBrStockDefaultSortColumn = 19;
-var cryptoDefaultSortColumn = 12;
+const fiiDefaultSortColumn = 19;
+const brStockDefaultSortColumn = 19;
+const nonBrStockDefaultSortColumn = 19;
+const cryptoDefaultSortColumn = 12;
 
 // Sheets names
-var fiisSheetName = "FIIs";
-var stocksSheetName = "ACOES NAC";
-var intStocksSheetName = "ACOES INT";
-var historicalSheetName = "HISTORICO";
-var cryptoSheetName = "CRYPTO";
+const fiisSheetName = "FIIs";
+const stocksSheetName = "ACOES NAC";
+const intStocksSheetName = "ACOES INT";
+const historicalSheetName = "HISTORICO";
+const cryptoSheetName = "CRYPTO";
 
 // Used for counting and finding tickers
-var stockRegex = /^[A-Z,a-z,0-9]+[0-9]+$/;
-var fiiRegex = /^[A-Z,a-z,0-9]+[0-9]+$/;
-var cryptoRegex = /^[A-Z,a-z]+$/;
+const stockRegex = /^[A-Z,a-z,0-9]+[0-9]+$/;
+const fiiRegex = /^[A-Z,a-z,0-9]+[0-9]+$/;
+const cryptoRegex = /^[A-Z,a-z]+$/;
 
 // Dialog parameters
-var loadingGif = "https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif";
-var dialogWidth = 200;
-var dialogHeight = 100;
-var dialogCloseDelay = 2 * 1000;
+const loadingGif = "https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif";
+const dialogWidth = 200;
+const dialogHeight = 100;
+const dialogCloseDelay = 2 * 1000;
 
 // EOF
