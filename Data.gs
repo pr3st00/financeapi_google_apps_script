@@ -2,11 +2,13 @@
  *  Data retrieving functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 20/10/2025
+ *  LastM : 23/04/2026
  * 
  * */
 
 const SUCCESS = 200;
+const DELAY = 1 * 1000;
+
 const OPTIONS = { 'muteHttpExceptions': true };
 
 function callFundamentusApi(type, ticker) {
@@ -15,6 +17,8 @@ function callFundamentusApi(type, ticker) {
   debug("Calling Fundamentus service: " + url);
 
   try {
+    Utilities.sleep(DELAY);
+    
     var response = UrlFetchApp.fetch(url, OPTIONS);
     var responseBody = response.getContentText();
 
