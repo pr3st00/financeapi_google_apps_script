@@ -18,7 +18,8 @@ const stockfundamentusUrls = {
   "IBM"       : "https://stockfundamentus.mybluemix.net",
   "HEROKU"    : "https://stockfundamentus.herokuapp.com",
   "HOME"      : "http://prestoapis.sytes.net:8080/fundamentus",
-  "ONRENDER"  : "https://fundamentus.onrender.com"
+  "ONRENDER"  : "https://fundamentus.onrender.com",
+  "GOOGLE"    : "https://fundamentus-542923649932.southamerica-east1.run.app"
 }
 
 const stockfundamentusImpl = "HOME";
