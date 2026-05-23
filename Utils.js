@@ -21,7 +21,7 @@ function getNumberOfLargeCaps() {
 }
 
 function getNumberOfSmallCaps() {
-  var ini = getNumberOfLargeCaps() + 2 + 2;
+  const ini = getNumberOfLargeCaps() + 2 + 2;
   return getNumberOfTickers(stocksSheetName, ini, stockRegex);
 }
 
@@ -34,15 +34,16 @@ function getNumberOfCrypto() {
 }
 
 function getNumberOfTickers(sheetName, ini, regex) {
-  var end = ini + 50;
-  var sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
-  var tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
-  var rows = 0;
-  var foundEnd = false;
+  const end = ini + 50;
+  const sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
+  const tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
+  
+  let rows = 0;
+  let foundEnd = false;
 
   tickers.forEach(function (ticker) {
 
-    var matches = ticker.toString().match(regex);
+    let matches = ticker.toString().match(regex);
 
     if (!matches) {
       foundEnd = true;
@@ -73,25 +74,25 @@ function hideZeroFiis() {
 }
 
 function hideZeroFromFilter(sheetName, filterColumnName, filterColumnNumber) {
-  var spreadsheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
+  const spreadsheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
   spreadsheet.getRange(filterColumnName).activate();
-  var criteria = SpreadsheetApp.newFilterCriteria()
+  const criteria = SpreadsheetApp.newFilterCriteria()
     .setHiddenValues(['0,0'])
     .build();
   spreadsheet.getFilter().setColumnFilterCriteria(filterColumnNumber, criteria);
 }
 
 function showProgressDialog(mesg) {
-  var html = "<center><iframe src=" + loadingGif + " width=50 height=50 frameBorder=0></iframe></center>";
-  var htmlOutput = HtmlService.createHtmlOutput(html).setWidth(dialogWidth).setHeight(dialogHeight);
+  let html = "<center><iframe src=" + loadingGif + " width=50 height=50 frameBorder=0></iframe></center>";
+  let htmlOutput = HtmlService.createHtmlOutput(html).setWidth(dialogWidth).setHeight(dialogHeight);
 
   //SpreadsheetApp.getUi().showModelessDialog(htmlOutput, title);
   SpreadsheetApp.getActive().toast(mesg, "- INFO -", 100);
 }
 
 function closeProgressDialog() {
-  var html = "<script>setTimeout(google.script.host.close(), " + dialogCloseDelay + ");</script>";
-  var htmlOutput = HtmlService.createHtmlOutput(html).setWidth(dialogWidth).setHeight(dialogHeight);
+  let html = "<script>setTimeout(google.script.host.close(), " + dialogCloseDelay + ");</script>";
+  let htmlOutput = HtmlService.createHtmlOutput(html).setWidth(dialogWidth).setHeight(dialogHeight);
 
   //SpreadsheetApp.getUi().showModelessDialog(htmlOutput, 'Completo');
   SpreadsheetApp.getActive().toast("Completo", "- INFO -", 3);
@@ -100,6 +101,7 @@ function closeProgressDialog() {
 function getActiveColumnNumber() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   const activeColumnNumber = sheet.getActiveRange().getColumn();
+  
   return activeColumnNumber;
 }
 
@@ -108,9 +110,9 @@ function alert(message) {
 }
 
 function readValue(title, message) {
-  var ui = SpreadsheetApp.getUi();
+  const ui = SpreadsheetApp.getUi();
 
-  var response = ui.prompt(
+  let response = ui.prompt(
     title,
     message,
     ui.ButtonSet.OK_CANCEL
@@ -124,9 +126,9 @@ function readValue(title, message) {
 }
 
 function confirm(title, message) {
-  var ui = SpreadsheetApp.getUi();
+  const ui = SpreadsheetApp.getUi();
 
-  var response = ui.alert(
+  let response = ui.alert(
     title,
     message,
     ui.ButtonSet.OK_CANCEL

@@ -65,7 +65,7 @@ function removeNonBrStock() {
 function insertNewStock(atPosition, fromPosition) {
   const sheet = SpreadsheetApp.getActiveSheet();
 
-  var ticker = readValue('Adicionar novo papel', 'Codigo do papel a ser adicionado:');
+  let ticker = readValue('Adicionar novo papel', 'Codigo do papel a ser adicionado:');
 
   if (ticker == null) {
     return;
@@ -73,9 +73,9 @@ function insertNewStock(atPosition, fromPosition) {
 
   sheet.insertRows(atPosition, 1);
 
-  var stockCell = sheet.getRange("A" + atPosition);
-  var gradeCell = sheet.getRange("N" + atPosition);
-  var currentCell = sheet.getRange("R" + atPosition);
+  let stockCell = sheet.getRange("A" + atPosition);
+  let gradeCell = sheet.getRange("N" + atPosition);
+  let currentCell = sheet.getRange("R" + atPosition);
 
   stockCell.setValue(ticker);
   gradeCell.setValue(0);
@@ -88,7 +88,7 @@ function insertNewStock(atPosition, fromPosition) {
 function removeTicker(ini, end) {
   const sheet = SpreadsheetApp.getActiveSheet();
 
-  var ticker = readValue('Remover papel', 'Codigo do papel a ser removido:');
+  let ticker = readValue('Remover papel', 'Codigo do papel a ser removido:');
 
   if (ticker == null) {
     return;
@@ -96,13 +96,13 @@ function removeTicker(ini, end) {
 
   debug("Searching for ticker " + ticker + " starting on row " + ini + " until row " + end);
 
-  var tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
-  var rowToDelete = ini;
-  var tickerFound = false;
+  let tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
+  let rowToDelete = ini;
+  let tickerFound = false;
 
   tickers.forEach(function (t) {
 
-    var matches = t.toString().match(ticker);
+    let matches = t.toString().match(ticker);
 
     debug("Matches: " + matches);
 
@@ -126,7 +126,7 @@ function insertNewFii() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const rowNumber = firstFiiRow + 1;
 
-  var ticker = readValue('Adicionar novo papel', 'Codigo do papel a ser adicionado:');
+  let ticker = readValue('Adicionar novo papel', 'Codigo do papel a ser adicionado:');
 
   if (ticker == null) {
     return;
@@ -134,9 +134,9 @@ function insertNewFii() {
 
   sheet.insertRows(rowNumber, 1);
 
-  var stockCell = sheet.getRange("A" + rowNumber);
-  var gradeCell = sheet.getRange("M" + rowNumber);
-  var currentCell = sheet.getRange("R" + rowNumber);
+  let stockCell = sheet.getRange("A" + rowNumber);
+  let gradeCell = sheet.getRange("M" + rowNumber);
+  let currentCell = sheet.getRange("R" + rowNumber);
 
   gradeCell.setValue(0);
   stockCell.setValue(ticker);
@@ -150,7 +150,7 @@ function undefineColumns(columnsToUndefine, rowNumber) {
   const sheet = SpreadsheetApp.getActiveSheet();
 
   for (column of columnsToUndefine) {
-    var destColumn = sheet.getRange(column + rowNumber);
+    let destColumn = sheet.getRange(column + rowNumber);
     destColumn.setValue("NA");
   }
 }
@@ -159,11 +159,11 @@ function copyColumns(columnsToCopy, toNumber, fromNumber) {
   const sheet = SpreadsheetApp.getActiveSheet();
 
   for (column of columnsToCopy) {
-    var sourceColumn = sheet.getRange(column + fromNumber);
-    var destColumn = sheet.getRange(column + toNumber);
+    let sourceColumn = sheet.getRange(column + fromNumber);
+    let destColumn = sheet.getRange(column + toNumber);
 
-    var origFormula = sourceColumn.getFormula();
-    var newFormula = origFormula.replaceAll(fromNumber, toNumber).replaceAll("$" + fromNumber, "$" + toNumber).replaceAll("$74", "$73");
+    let origFormula = sourceColumn.getFormula();
+    let newFormula = origFormula.replaceAll(fromNumber, toNumber).replaceAll("$" + fromNumber, "$" + toNumber).replaceAll("$74", "$73");
 
     debug("Copying formula from row [" + fromNumber + "] to row [" + toNumber + "]");
     debug("Formula transformation:  [" + origFormula + "]   ->   [" + newFormula + "]");

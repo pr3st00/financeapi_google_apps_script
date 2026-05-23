@@ -34,9 +34,9 @@ function sortAll() {
  * @param ascending
  */
 function sortBrStocks(showMessage, columnToSortBy, ascending) {
-  var ini = firstStockRow;
-  var end = ini + getNumberOfLargeCaps() - 1;
-  var sortBy = columnToSortBy ? columnToSortBy : stockDefaultSortColumn;
+  const ini = firstStockRow;
+  const end = ini + getNumberOfLargeCaps() - 1;
+  const sortBy = columnToSortBy ? columnToSortBy : stockDefaultSortColumn;
 
   sortRange(stocksSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 
@@ -96,9 +96,9 @@ function sortBrStocksByPat() {
  * @param ascending
  */
 function sortNonBrStocks(showMessage, columnToSortBy, ascending) {
-  var ini = firstStockRow - 1;
-  var end = ini + getNumberOfIntStocks() - 1;
-  var sortBy = columnToSortBy ? columnToSortBy : nonBrStockDefaultSortColumn;
+  const ini = firstStockRow - 1;
+  const end = ini + getNumberOfIntStocks() - 1;
+  const sortBy = columnToSortBy ? columnToSortBy : nonBrStockDefaultSortColumn;
 
   sortRange(intStocksSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 }
@@ -133,9 +133,9 @@ function sortNonBrStocksByTicker() {
  * @param ascending
  */
 function sortFiis(showMessage, columnToSortBy, ascending) {
-  var ini = firstFiiRow;
-  var end = ini + getNumberOfFiis() - 1;
-  var sortBy = columnToSortBy ? columnToSortBy : fiiDefaultSortColumn;
+  const ini = firstFiiRow;
+  const end = ini + getNumberOfFiis() - 1;
+  const sortBy = columnToSortBy ? columnToSortBy : fiiDefaultSortColumn;
 
   sortRange(fiisSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 }
@@ -185,9 +185,9 @@ function sortFiisByPat() {
  * @param columnToSortBy
  */
 function sortCrypto(showMessage, columnToSortBy, ascending) {
-  var ini = firstCryptoRow;
-  var end = ini + getNumberOfCrypto() - 1;
-  var sortBy = columnToSortBy ? columnToSortBy : cryptoDefaultSortColumn;
+  const ini = firstCryptoRow;
+  const end = ini + getNumberOfCrypto() - 1;
+  const sortBy = columnToSortBy ? columnToSortBy : cryptoDefaultSortColumn;
 
   sortRange(cryptoSheetName, sortBy, "A" + ini + ":L" + end, showMessage, ascending);
 }
@@ -218,14 +218,15 @@ function sortCryptoByTicker() {
  * Sorts historical data
  */
 function sortHistory() {
-  var sheet = SpreadsheetApp.getActive().getSheetByName(historicalSheetName);
-  var ui = SpreadsheetApp.getUi();
-  var columnToSortBy;
+  const sheet = SpreadsheetApp.getActive().getSheetByName(historicalSheetName);
+  const ui = SpreadsheetApp.getUi();
 
   // The three variables below controls all the sorting data
-  var orderByCell = sheet.getRange("P7");
-  var initialColumn = 4; // Rent column number
-  var ascending = sheet.getRange("P9").getValue();
+  const orderByCell = sheet.getRange("P7");
+  const initialColumn = 4; // Rent column number
+  const ascending = sheet.getRange("P9").getValue();
+
+  let columnToSortBy;
 
   switch (orderByCell.getValue()) {
     case "RENT":
@@ -255,9 +256,10 @@ function sortHistory() {
 
   debug(orderByCell.getValue() + " - " + columnToSortBy);
 
-  var numberOfRanges = 3;
-  var ini = 0;
-  var end = 1;
+  const numberOfRanges = 3;
+  
+  let ini = 0;
+  let end = 1;
 
   for (i = 0; i < numberOfRanges; i++) {
     ini = end + 2;
@@ -277,13 +279,13 @@ function sortHistory() {
  * @param ascending
  */
 function sortRange(sheetName, columnToSortBy, tableRange, showMessage, ascending) {
-  var sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
-  var editedCell = sheet.getActiveCell();
-  var ui = SpreadsheetApp.getUi();
+  const sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
+  const editedCell = sheet.getActiveCell();
+  const ui = SpreadsheetApp.getUi();
 
   debug("ShetName=" + sheetName + ", columnToSortBy=" + columnToSortBy + ", tableRange=" + tableRange + ", showMessage=" + showMessage);
 
-  var range = sheet.getRange(tableRange);
+  const range = sheet.getRange(tableRange);
   range.sort({ column: columnToSortBy, ascending: ascending });
 
   if (showMessage) {

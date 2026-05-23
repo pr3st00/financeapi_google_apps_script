@@ -2,12 +2,12 @@
  *  Menu related functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 03/12/2023
+ *  LastM : 23/05/2026
  * 
  * */
 
 function addMenus() {
-  var ui = SpreadsheetApp.getUi();
+  const ui = SpreadsheetApp.getUi();
 
   ui.createMenu('- Investimentos -')
     .addItem('Atualizar dados', 'updateAllIndicators')
@@ -34,7 +34,7 @@ function addMenus() {
 }
 
 function showScreen(fileName, title, height, width) {
-  var splashScreen = HtmlService.createHtmlOutputFromFile(fileName)
+  const splashScreen = HtmlService.createHtmlOutputFromFile(fileName)
     .setHeight(height)
     .setWidth(width);
 

@@ -12,15 +12,15 @@ const DELAY = 1 * 1000;
 const OPTIONS = { 'muteHttpExceptions': true };
 
 function callFundamentusApi(type, ticker) {
-  var url = stockfundamentusUrl + "/" + type + "/" + ticker;
+  let url = stockfundamentusUrl + "/" + type + "/" + ticker;
 
   debug("Calling Fundamentus service: " + url);
 
   try {
     Utilities.sleep(DELAY);
     
-    var response = UrlFetchApp.fetch(url, OPTIONS);
-    var responseBody = response.getContentText();
+    let response = UrlFetchApp.fetch(url, OPTIONS);
+    let responseBody = response.getContentText();
 
     if (response.getResponseCode() === SUCCESS) {
       return JSON.parse(responseBody);
@@ -38,10 +38,10 @@ function callFundamentusApi(type, ticker) {
 function updateAllIndicators() {
   showProgressDialog(getMessage("INDICATORS_UPDATE"));
 
-  var lastFiiRow = firstFiiRow + getNumberOfFiis() - 1;
-  var lastLargeCapRow = firstStockRow + getNumberOfLargeCaps() - 1;
-  var firstSmallCapRow = lastLargeCapRow + 2;
-  var lastSmallCapRow = firstSmallCapRow + getNumberOfSmallCaps() - 1;
+  const lastFiiRow = firstFiiRow + getNumberOfFiis() - 1;
+  const lastLargeCapRow = firstStockRow + getNumberOfLargeCaps() - 1;
+  const firstSmallCapRow = lastLargeCapRow + 2;
+  const lastSmallCapRow = firstSmallCapRow + getNumberOfSmallCaps() - 1;
 
   updateFiiIndicators(firstFiiRow, lastFiiRow);
   updateStockIndicators(firstStockRow, lastLargeCapRow);
@@ -51,7 +51,7 @@ function updateAllIndicators() {
 }
 
 function getIndicator(ticker, indicator, type) {
-  var data = callFundamentusApi(type, ticker);
+  const data = callFundamentusApi(type, ticker);
   return getData(data, indicator);
 }
 
@@ -64,9 +64,10 @@ function getStockIndicator(ticker, indicator) {
 }
 
 function getData(data, indicator, defaultValue) {
-  var value = data && data[indicator] ? data[indicator] : defaultValue;
-  var convertToPercent = ["dy", "roe", "roic", "tax"];
-  var stringElements = ["ticker", "sector", "properties"];
+  const convertToPercent = ["dy", "roe", "roic", "tax"];
+  const stringElements = ["ticker", "sector", "properties"];
+
+  let value = data && data[indicator] ? data[indicator] : defaultValue;
 
   debug("Indicator: [" + indicator + "], Value: [" + value + "]");
 
@@ -78,18 +79,19 @@ function getData(data, indicator, defaultValue) {
 }
 
 function updateFiiIndicators(ini, end) {
-  var sheet = SpreadsheetApp.getActive().getSheetByName(fiisSheetName);
-  var tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
-  var i = ini;
+  const sheet = SpreadsheetApp.getActive().getSheetByName(fiisSheetName);
+  const tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
+  
+  let i = ini;
 
   tickers.forEach(function (ticker) {
 
-    var pvpCell = sheet.getRange("F" + i);
-    var dyCell = sheet.getRange("G" + i);
-    var segCell = sheet.getRange("D" + i);
-    var vacCell = sheet.getRange("J" + i);
-    var propCell = sheet.getRange("K" + i);
-    var taxCell = sheet.getRange("I" + i);
+    let pvpCell = sheet.getRange("F" + i);
+    let dyCell = sheet.getRange("G" + i);
+    let segCell = sheet.getRange("D" + i);
+    let vacCell = sheet.getRange("J" + i);
+    let propCell = sheet.getRange("K" + i);
+    let taxCell = sheet.getRange("I" + i);
 
     debug(ticker);
 
@@ -101,7 +103,7 @@ function updateFiiIndicators(ini, end) {
 
     SpreadsheetApp.flush();
 
-    var data = callFundamentusApi("fii", ticker);
+    let data = callFundamentusApi("fii", ticker);
 
     debug(data);
 
@@ -118,18 +120,18 @@ function updateFiiIndicators(ini, end) {
 }
 
 function updateStockIndicators(ini, end) {
-  var sheet = SpreadsheetApp.getActive().getSheetByName(stocksSheetName);
-  var tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
-  var i = ini;
+  const sheet = SpreadsheetApp.getActive().getSheetByName(stocksSheetName);
+  const tickers = sheet.getRange("A" + ini + ":A" + end).getValues();
+  let i = ini;
 
   tickers.forEach(function (ticker) {
 
-    var plCell = sheet.getRange("E" + i);
-    var pvpCell = sheet.getRange("F" + i);
-    var dyCell = sheet.getRange("G" + i);
-    var roicCell = sheet.getRange("H" + i);
-    var eveCell = sheet.getRange("I" + i);
-    var lpaCell = sheet.getRange("J" + i);
+    let plCell = sheet.getRange("E" + i);
+    let pvpCell = sheet.getRange("F" + i);
+    let dyCell = sheet.getRange("G" + i);
+    let roicCell = sheet.getRange("H" + i);
+    let eveCell = sheet.getRange("I" + i);
+    let lpaCell = sheet.getRange("J" + i);
 
     debug(ticker);
 
@@ -142,7 +144,7 @@ function updateStockIndicators(ini, end) {
 
     SpreadsheetApp.flush();
 
-    var data = callFundamentusApi("stock", ticker);
+    let data = callFundamentusApi("stock", ticker);
 
     plCell.setValue(getData(data, "pl", 0));
     pvpCell.setValue(getData(data, "pvp", 0));

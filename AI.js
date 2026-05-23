@@ -12,10 +12,10 @@ function analyzeFii() {
   const values = sheet.getRange("A1:S" + lastRow).getValues();
 
   const data = values.flat().join("\n");
-  var prompt = buildPrompt(data, "fundos imobiliarios");
+  let prompt = buildPrompt(data, "fundos imobiliarios");
 
   showProgressDialog(getMessage("AI_ANALYSING"));
-  var response = getFromCache("FII_AI") != null ?
+  let response = getFromCache("FII_AI") != null ?
     getFromCache("FII_AI") : addToCache("FII_AI", ai(prompt));
   closeProgressDialog();
 
@@ -28,10 +28,10 @@ function analyzeStock() {
   const values = sheet.getRange("A1:S" + lastRow).getValues();
 
   const data = values.flat().join("\n");
-  var prompt = buildPrompt(data, "acoes");
+  let prompt = buildPrompt(data, "acoes");
 
   showProgressDialog(getMessage("AI_ANALYSING"));
-  var response = getFromCache("STOCK_AI") != null ?
+  let response = getFromCache("STOCK_AI") != null ?
     getFromCache("STOCK_AI") : addToCache("STOCK_AI", ai(prompt));
   closeProgressDialog();
 
@@ -44,10 +44,10 @@ function analyzeCrypto() {
   const values = sheet.getRange("A1:L" + lastRow).getValues();
 
   const data = values.flat().join("\n");
-  var prompt = buildPrompt(data, "crypto moedas");
+  let prompt = buildPrompt(data, "crypto moedas");
 
   showProgressDialog(getMessage("AI_ANALYSING"));
-  var response = getFromCache("CRYPTO_AI") != null ?
+  let response = getFromCache("CRYPTO_AI") != null ?
     getFromCache("CRYPTO_AI") : addToCache("CRYPTO_AI", ai(prompt));
   closeProgressDialog();
 
