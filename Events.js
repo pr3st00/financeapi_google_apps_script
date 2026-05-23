@@ -2,7 +2,7 @@
  *  Events functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 01/06/2024
+ *  LastM : 23/05/2026
  * 
  * */
 

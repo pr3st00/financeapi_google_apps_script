@@ -2,72 +2,54 @@
  *  AI related functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 22/05/2026
+ *  LastM : 23/05/2026
  * 
  * */
+
+const WIDTH = 800;
+const HEIGHT = 800;
+
+function analyze(range, type, cacheKey) {
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const values = sheet.getRange(range).getValues();
+
+  const data = values.flat().join("\n");
+  let prompt = buildPrompt(data, type);
+
+  showProgressDialog(getMessage("AI_ANALYSING"));
+  let response = getFromCache(cacheKey) != null ?
+    getFromCache(cacheKey) : addToCache(cacheKey, ai(prompt));
+  closeProgressDialog();
+
+  showDialog(getMessage("AI_ANALYSING"), shouldMask() ? maskText(response) : response, WIDTH, HEIGHT);
+}
 
 function analyzeFii() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfFiis() + 1;
-  const values = sheet.getRange("A1:S" + lastRow).getValues();
 
-  const data = values.flat().join("\n");
-  let prompt = buildPrompt(data, "fundos imobiliarios");
-
-  showProgressDialog(getMessage("AI_ANALYSING"));
-  let response = getFromCache("FII_AI") != null ?
-    getFromCache("FII_AI") : addToCache("FII_AI", ai(prompt));
-  closeProgressDialog();
-
-  showDialog(getMessage("AI_ANALYSING"), response, 800, 500);
+  analyze("A1:S" + lastRow,"fundos imobiliarios", "FII_AI");
 }
 
 function analyzeBrStock() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfLargeCaps() + getNumberOfSmallCaps() + 3;
-  const values = sheet.getRange("A1:S" + lastRow).getValues();
 
-  const data = values.flat().join("\n");
-  let prompt = buildPrompt(data, "acoes");
-
-  showProgressDialog(getMessage("AI_ANALYSING"));
-  let response = getFromCache("STOCK_AI") != null ?
-    getFromCache("STOCK_AI") : addToCache("STOCK_AI", ai(prompt));
-  closeProgressDialog();
-
-  showDialog(getMessage("AI_ANALYSING"), response, 800, 500);
+  analyze("A1:S" + lastRow,"acoes", "STOCK_AI");
 }
 
 function analyzeNonBrStock() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfIntStocks() + 1;
-  const values = sheet.getRange("A1:S" + lastRow).getValues();
 
-  const data = values.flat().join("\n");
-  let prompt = buildPrompt(data, "bdrs");
-
-  showProgressDialog(getMessage("AI_ANALYSING"));
-  let response = getFromCache("BDR_AI") != null ?
-    getFromCache("BDR_AI") : addToCache("BDR_AI", ai(prompt));
-  closeProgressDialog();
-
-  showDialog(getMessage("AI_ANALYSING"), response, 800, 500);
+  analyze("A1:S" + lastRow,"bdrs","BDR_AI");
 }
 
 function analyzeCrypto() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfCrypto() + 1;
-  const values = sheet.getRange("A1:L" + lastRow).getValues();
 
-  const data = values.flat().join("\n");
-  let prompt = buildPrompt(data, "crypto moedas");
-
-  showProgressDialog(getMessage("AI_ANALYSING"));
-  let response = getFromCache("CRYPTO_AI") != null ?
-    getFromCache("CRYPTO_AI") : addToCache("CRYPTO_AI", ai(prompt));
-  closeProgressDialog();
-
-  showDialog(getMessage("AI_ANALYSING"), response, 800, 500);
+  analyze("A1:L" + lastRow,"crypto moedas","CRYPTO_AI");
 }
 
 function ai(prompt) {

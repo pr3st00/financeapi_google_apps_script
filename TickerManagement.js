@@ -2,7 +2,7 @@
  *  Ticker management routines
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 13/10/2025
+ *  LastM : 23/05/2026
  * 
  * */
 

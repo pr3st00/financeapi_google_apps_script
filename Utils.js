@@ -2,7 +2,7 @@
  *  General Utilities
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 20/05/2026
+ *  LastM : 23/05/2026
  * 
  * */
 
@@ -143,6 +143,16 @@ function showDialog(title, text, width, height) {
     .setHeight(height);
 
   SpreadsheetApp.getUi().showModalDialog(html, title);
+}
+
+function shouldMask() {
+  const sheet = SpreadsheetApp.getActive().getSheetByName("VISAO GERAL");
+  
+  return sheet.getRange("M4").getValue();
+}
+
+function maskText(text) {
+  return text.replace(/R?\$\s?\d{1,3}(\.\d{3})*,\d{2}/g, "R$ XXXX");
 }
 
 // EOF
