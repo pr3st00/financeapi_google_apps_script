@@ -2,7 +2,7 @@
  *  General Utilities
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 13/10/2025
+ *  LastM : 20/05/2026
  * 
  * */
 
@@ -84,7 +84,7 @@ function hideZeroFromFilter(sheetName, filterColumnName, filterColumnNumber) {
 function showProgressDialog(mesg) {
   var html = "<center><iframe src=" + loadingGif + " width=50 height=50 frameBorder=0></iframe></center>";
   var htmlOutput = HtmlService.createHtmlOutput(html).setWidth(dialogWidth).setHeight(dialogHeight);
-  
+
   //SpreadsheetApp.getUi().showModelessDialog(htmlOutput, title);
   SpreadsheetApp.getActive().toast(mesg, "- INFO -", 100);
 }
@@ -92,7 +92,7 @@ function showProgressDialog(mesg) {
 function closeProgressDialog() {
   var html = "<script>setTimeout(google.script.host.close(), " + dialogCloseDelay + ");</script>";
   var htmlOutput = HtmlService.createHtmlOutput(html).setWidth(dialogWidth).setHeight(dialogHeight);
-  
+
   //SpreadsheetApp.getUi().showModelessDialog(htmlOutput, 'Completo');
   SpreadsheetApp.getActive().toast("Completo", "- INFO -", 3);
 }
@@ -111,21 +111,21 @@ function readValue(title, message) {
   var ui = SpreadsheetApp.getUi();
 
   var response = ui.prompt(
-    title, 
-    message, 
+    title,
+    message,
     ui.ButtonSet.OK_CANCEL
   );
 
   if (response.getSelectedButton() == ui.Button.OK) {
     return response.getResponseText();
-  } else  {
+  } else {
     return null;
   }
 }
 
 function confirm(title, message) {
   var ui = SpreadsheetApp.getUi();
-  
+
   var response = ui.alert(
     title,
     message,
@@ -133,6 +133,14 @@ function confirm(title, message) {
   );
 
   return response == ui.Button.OK;
+}
+
+function showDialog(title, text, width, height) {
+  const html = HtmlService.createHtmlOutput(text)
+    .setWidth(width)
+    .setHeight(height);
+
+  SpreadsheetApp.getUi().showModalDialog(html, title);
 }
 
 // EOF

@@ -2,17 +2,19 @@
  *  Constants
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 20/10/2025
+ *  LastM : 20/05/2026
  * 
  * */
 
-const VERSION = 1.8;
+const VERSION = 1.9;
 
 const LANG = "pt-br";
 const DEBUG = true;
 
 const LOAD_INDICATORS_ON_OPEN = false;
 const SORT_ALL_ON_OPEN = true;
+
+const API_KEY = "XXX";
 
 const stockfundamentusUrls = {
   "IBM"       : "https://stockfundamentus.mybluemix.net",
