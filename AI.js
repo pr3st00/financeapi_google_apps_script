@@ -22,7 +22,7 @@ function analyzeFii() {
   showDialog(getMessage("AI_ANALYSING"), response, 800, 500);
 }
 
-function analyzeStock() {
+function analyzeBrStock() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfLargeCaps() + getNumberOfSmallCaps() + 3;
   const values = sheet.getRange("A1:S" + lastRow).getValues();
@@ -33,6 +33,22 @@ function analyzeStock() {
   showProgressDialog(getMessage("AI_ANALYSING"));
   let response = getFromCache("STOCK_AI") != null ?
     getFromCache("STOCK_AI") : addToCache("STOCK_AI", ai(prompt));
+  closeProgressDialog();
+
+  showDialog(getMessage("AI_ANALYSING"), response, 800, 500);
+}
+
+function analyzeNonBrStock() {
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const lastRow = getNumberOfIntStocks() + 1;
+  const values = sheet.getRange("A1:S" + lastRow).getValues();
+
+  const data = values.flat().join("\n");
+  let prompt = buildPrompt(data, "bdrs");
+
+  showProgressDialog(getMessage("AI_ANALYSING"));
+  let response = getFromCache("BDR_AI") != null ?
+    getFromCache("BDR_AI") : addToCache("BDR_AI", ai(prompt));
   closeProgressDialog();
 
   showDialog(getMessage("AI_ANALYSING"), response, 800, 500);
