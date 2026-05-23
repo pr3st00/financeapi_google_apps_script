@@ -34,9 +34,10 @@ function sortAll() {
  * @param ascending
  */
 function sortBrStocks(showMessage, columnToSortBy, ascending) {
-  const ini = firstStockRow;
-  const end = ini + getNumberOfLargeCaps() - 1;
-  const sortBy = columnToSortBy ? columnToSortBy : stockDefaultSortColumn;
+  let ini = firstStockRow;
+  let end = ini + getNumberOfLargeCaps() - 1;
+  
+  const sortBy = columnToSortBy ? columnToSortBy : brStockDefaultSortColumn;
 
   sortRange(stocksSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 
