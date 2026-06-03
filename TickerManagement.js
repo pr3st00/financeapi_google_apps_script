@@ -43,22 +43,18 @@ function removeFii() {
 
 function insertCrypto() {
   alert("Nao implementado.");
-  return;
 }
 
 function removeCrypto() {
   alert("Nao implementado.");
-  return;
 }
 
 function insertNonBrStock() {
   alert("Nao implementado.");
-  return;
 }
 
 function removeNonBrStock() {
   alert("Nao implementado.");
-  return;
 }
 
 
@@ -149,7 +145,7 @@ function insertNewFii() {
 function undefineColumns(columnsToUndefine, rowNumber) {
   const sheet = SpreadsheetApp.getActiveSheet();
 
-  for (column of columnsToUndefine) {
+  for (let column of columnsToUndefine) {
     let destColumn = sheet.getRange(column + rowNumber);
     destColumn.setValue("NA");
   }
@@ -158,7 +154,7 @@ function undefineColumns(columnsToUndefine, rowNumber) {
 function copyColumns(columnsToCopy, toNumber, fromNumber) {
   const sheet = SpreadsheetApp.getActiveSheet();
 
-  for (column of columnsToCopy) {
+  for (let column of columnsToCopy) {
     let sourceColumn = sheet.getRange(column + fromNumber);
     let destColumn = sheet.getRange(column + toNumber);
 

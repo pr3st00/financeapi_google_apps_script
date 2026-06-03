@@ -2,7 +2,7 @@
  *  System Messages
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 23/05/2026
+ *  LastM : 03/06/2026
  * 
  * */
 
@@ -10,12 +10,14 @@ const MESSAGE_NOT_FOUND = "Message not found";
 
 const MESSAGES = {
   "pt-br": {
+    "AI_ERROR_MESSAGE" : "Erro servico IA :",
     "FUNDAMENTUS_ERROR_MESSAGE": "Erro no servico fundamentus : ",
     "INDICATORS_UPDATE": "Atualizando dados",
     "TICKER_SORTING": "Ordenandos ativos",
     "AI_ANALYSING": "Analisando com IA"
   },
   "en-us": {
+    "AI_ERROR_MESSAGE" : "AI service error : ",
     "FUNDAMENTUS_ERROR_MESSAGE": "Fundamentus service error : ",
     "INDICATORS_UPDATE": "Updating data",
     "TICKER_SORTING": "Sorting tickers",

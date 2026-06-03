@@ -71,11 +71,11 @@ function getData(data, indicator, defaultValue) {
 
   debug("Indicator: [" + indicator + "], Value: [" + value + "]");
 
-  if (convertToPercent.indexOf(indicator) > -1) {
+  if (convertToPercent.includes(indicator)) {
     value = value / 100;
   }
 
-  return stringElements.indexOf(indicator) > -1 ? value : Number(value);
+  return stringElements.includes(indicator) ? value : Number(value);
 }
 
 function updateFiiIndicators(ini, end) {

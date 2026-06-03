@@ -2,7 +2,7 @@
  *  Sorting functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 23/05/2026
+ *  LastM : 06/03/2026
  * 
  * */
 
@@ -37,7 +37,7 @@ function sortBrStocks(showMessage, columnToSortBy, ascending) {
   let ini = firstStockRow;
   let end = ini + getNumberOfLargeCaps() - 1;
   
-  const sortBy = columnToSortBy ? columnToSortBy : brStockDefaultSortColumn;
+  const sortBy = columnToSortBy || brStockDefaultSortColumn;
 
   sortRange(stocksSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 
@@ -99,7 +99,7 @@ function sortBrStocksByPat() {
 function sortNonBrStocks(showMessage, columnToSortBy, ascending) {
   const ini = firstStockRow - 1;
   const end = ini + getNumberOfIntStocks() - 1;
-  const sortBy = columnToSortBy ? columnToSortBy : nonBrStockDefaultSortColumn;
+  const sortBy = columnToSortBy || nonBrStockDefaultSortColumn;
 
   sortRange(intStocksSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 }
@@ -136,7 +136,7 @@ function sortNonBrStocksByTicker() {
 function sortFiis(showMessage, columnToSortBy, ascending) {
   const ini = firstFiiRow;
   const end = ini + getNumberOfFiis() - 1;
-  const sortBy = columnToSortBy ? columnToSortBy : fiiDefaultSortColumn;
+  const sortBy = columnToSortBy || fiiDefaultSortColumn;
 
   sortRange(fiisSheetName, sortBy, "A" + ini + ":S" + end, showMessage, ascending);
 }
@@ -188,7 +188,7 @@ function sortFiisByPat() {
 function sortCrypto(showMessage, columnToSortBy, ascending) {
   const ini = firstCryptoRow;
   const end = ini + getNumberOfCrypto() - 1;
-  const sortBy = columnToSortBy ? columnToSortBy : cryptoDefaultSortColumn;
+  const sortBy = columnToSortBy || cryptoDefaultSortColumn;
 
   sortRange(cryptoSheetName, sortBy, "A" + ini + ":L" + end, showMessage, ascending);
 }
@@ -220,7 +220,6 @@ function sortCryptoByTicker() {
  */
 function sortHistory() {
   const sheet = SpreadsheetApp.getActive().getSheetByName(historicalSheetName);
-  const ui = SpreadsheetApp.getUi();
 
   // The three variables below controls all the sorting data
   const orderByCell = sheet.getRange("P7");
@@ -262,7 +261,7 @@ function sortHistory() {
   let ini = 0;
   let end = 1;
 
-  for (i = 0; i < numberOfRanges; i++) {
+  for (let i = 0; i < numberOfRanges; i++) {
     ini = end + 2;
     end = ini + getNumberOfTickers(historicalSheetName, ini, stockRegex) - 1;
 
@@ -281,7 +280,6 @@ function sortHistory() {
  */
 function sortRange(sheetName, columnToSortBy, tableRange, showMessage, ascending) {
   const sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
-  const editedCell = sheet.getActiveCell();
   const ui = SpreadsheetApp.getUi();
 
   debug("ShetName=" + sheetName + ", columnToSortBy=" + columnToSortBy + ", tableRange=" + tableRange + ", showMessage=" + showMessage);

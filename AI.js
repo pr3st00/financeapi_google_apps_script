@@ -2,7 +2,7 @@
  *  AI related functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 01/06/2026
+ *  LastM : 03/06/2026
  * 
  * */
 
@@ -39,28 +39,24 @@ function analyze(range, type, cacheKey) {
 }
 
 function analyzeFii() {
-  const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfFiis() + 1;
 
   analyze("A1:S" + lastRow, "fundos imobiliarios", "FII_AI");
 }
 
 function analyzeBrStock() {
-  const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfLargeCaps() + getNumberOfSmallCaps() + 3;
 
   analyze("A1:S" + lastRow, "acoes", "STOCK_AI");
 }
 
 function analyzeNonBrStock() {
-  const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfIntStocks() + 1;
 
   analyze("A1:S" + lastRow, "bdrs", "BDR_AI");
 }
 
 function analyzeCrypto() {
-  const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfCrypto() + 1;
   
   analyze("A1:L" + lastRow, "crypto moedas", "CRYPTO_AI");
@@ -95,6 +91,7 @@ function ai(prompt) {
   try {
     return extractText(data);
   } catch (e) {
+    Logger.log(getMessage("AI_ERROR_MESSAGE") + e.message);
     return "Error: " + response.getContentText();
   }
 }
@@ -106,6 +103,7 @@ function extractText(data) {
       .join("")
       .trim();
   } catch (e) {
+    Logger.log(getMessage("AI_ERROR_MESSAGE") + e.message);
     return "Error: " + JSON.stringify(data);
   }
 }
