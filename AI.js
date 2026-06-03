@@ -2,7 +2,7 @@
  *  AI related functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 23/05/2026
+ *  LastM : 01/06/2026
  * 
  * */
 
@@ -14,11 +14,25 @@ function analyze(range, type, cacheKey) {
   const values = sheet.getRange(range).getValues();
 
   const data = values.flat().join("\n");
-  let prompt = buildPrompt(data, type);
+  const question = readValue('Analisar com Inteligencia Artificial', 'Questao (opcional)\n\n(deixe vazio para uma analise completa):');
+
+  if (question == null) {
+    return;
+  }
+
+  let prompt = buildPrompt(data, type, question);
 
   showProgressDialog(getMessage("AI_ANALYSING"));
-  let response = getFromCache(cacheKey) != null ?
-    getFromCache(cacheKey) : addToCache(cacheKey, ai(prompt));
+
+  let response = null;
+
+  if (question) {
+    response = ai(prompt);
+  } else {
+    response = getFromCache(cacheKey) != null ?
+      getFromCache(cacheKey) : addToCache(cacheKey, ai(prompt));
+  }
+
   closeProgressDialog();
 
   showDialog(getMessage("AI_ANALYSING"), shouldMask() ? maskText(response) : response, WIDTH, HEIGHT);
@@ -28,28 +42,28 @@ function analyzeFii() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfFiis() + 1;
 
-  analyze("A1:S" + lastRow,"fundos imobiliarios", "FII_AI");
+  analyze("A1:S" + lastRow, "fundos imobiliarios", "FII_AI");
 }
 
 function analyzeBrStock() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfLargeCaps() + getNumberOfSmallCaps() + 3;
 
-  analyze("A1:S" + lastRow,"acoes", "STOCK_AI");
+  analyze("A1:S" + lastRow, "acoes", "STOCK_AI");
 }
 
 function analyzeNonBrStock() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfIntStocks() + 1;
 
-  analyze("A1:S" + lastRow,"bdrs","BDR_AI");
+  analyze("A1:S" + lastRow, "bdrs", "BDR_AI");
 }
 
 function analyzeCrypto() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const lastRow = getNumberOfCrypto() + 1;
-
-  analyze("A1:L" + lastRow,"crypto moedas","CRYPTO_AI");
+  
+  analyze("A1:L" + lastRow, "crypto moedas", "CRYPTO_AI");
 }
 
 function ai(prompt) {
@@ -96,7 +110,23 @@ function extractText(data) {
   }
 }
 
-function buildPrompt(data, type) {
+function buildPrompt(data, type, question) {
+  if (question) {
+    return `
+    Voce é um analista financeiro da empresa AI Analysis.
+    
+    Sua funcao é analisar uma carteira de investimentos composta por ${type}.
+
+    Responda a seguinte pergunta com um html estruturado em HTML5 com estilização moderna via Tailwind CSS (através de CDN, dispensando arquivos externos) e um visual branco e light.
+
+    Pergunta: ${question}
+
+    Nao inclua nada alem do html descrito acima na resposta. 
+    
+    Composicao: ${data}
+    `;
+  }
+
   return `
     Voce é um analista financeiro da empresa AI Analysis.
     
