@@ -2,12 +2,15 @@
  *  AI related functions
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 03/06/2026
+ *  LastM : 08/06/2026
  * 
  * */
 
 const WIDTH = 800;
 const HEIGHT = 800;
+
+const SUCCESS_RESPONSE = "success";
+const ERROR_RESPONSE = "error";
 
 function analyze(range, type, cacheKey) {
   const sheet = SpreadsheetApp.getActiveSheet();
@@ -22,20 +25,35 @@ function analyze(range, type, cacheKey) {
 
   let prompt = buildPrompt(data, type, question);
 
+  // debug("Prompt is : " + prompt);
+
   showProgressDialog(getMessage("AI_ANALYSING"));
 
   let response = null;
 
   if (question) {
+    // Do not catch custom queries
     response = ai(prompt);
   } else {
-    response = getFromCache(cacheKey) != null ?
-      getFromCache(cacheKey) : addToCache(cacheKey, ai(prompt));
+    let cachedResponse = getFromCache(cacheKey);
+
+    if (cachedResponse != null) {
+      response = JSON.parse(cachedResponse);
+      debug("Using cached response with status : " + response.status);
+    } else {
+      response = ai(prompt);
+      debug("AI service response : " + response.status);
+      response?.status == SUCCESS_RESPONSE && addToCache(cacheKey, JSON.stringify(response));
+    }
   }
 
   closeProgressDialog();
 
-  showDialog(getMessage("AI_ANALYSING"), shouldMask() ? maskText(response) : response, WIDTH, HEIGHT);
+  if (response?.status != SUCCESS_RESPONSE) {
+    showErrorDialog(response?.data);
+  } else {
+    showDialog(getMessage("AI_ANALYSING"), shouldMask() ? maskText(response?.data) : response?.data, WIDTH, HEIGHT);
+  }
 }
 
 function analyzeFii() {
@@ -58,7 +76,7 @@ function analyzeNonBrStock() {
 
 function analyzeCrypto() {
   const lastRow = getNumberOfCrypto() + 1;
-  
+
   analyze("A1:L" + lastRow, "crypto moedas", "CRYPTO_AI");
 }
 
@@ -82,53 +100,59 @@ function ai(prompt) {
     method: "post",
     contentType: "application/json",
     payload: JSON.stringify(payload),
-    muteHttpExceptions: true
+    muteHttpExceptions: false
   };
 
-  const response = UrlFetchApp.fetch(url, options);
-  const data = JSON.parse(response.getContentText());
-
   try {
-    return extractText(data);
+    const apiResponse = UrlFetchApp.fetch(url, options);
+    const data = JSON.parse(apiResponse.getContentText());
+
+    const response = { status: SUCCESS_RESPONSE, data: extractText(data) };
+
+    debug("Response from AI service is : " + response);
+
+    return response;
   } catch (e) {
     Logger.log(getMessage("AI_ERROR_MESSAGE") + e.message);
-    return "Error: " + response.getContentText();
+    return { status: ERROR_RESPONSE, data : e.message, error: e.message };
   }
 }
 
 function extractText(data) {
-  try {
-    return data.candidates[0].content.parts
-      .map(p => p.text || "")
-      .join("")
-      .trim();
-  } catch (e) {
-    Logger.log(getMessage("AI_ERROR_MESSAGE") + e.message);
-    return "Error: " + JSON.stringify(data);
-  }
+  return data.candidates[0].content.parts
+    .map(p => p.text || "")
+    .join("")
+    .trim();
 }
 
 function buildPrompt(data, type, question) {
-  if (question) {
-    return `
+  let persona = `
     Voce é um analista financeiro da empresa AI Analysis.
     
     Sua funcao é analisar uma carteira de investimentos composta por ${type}.
+  `;
+
+  let composition = `
+    Nao inclua nada alem do html descrito acima na resposta.
+    Inclua um botao para imprimir o relatorio no final.
+    
+    Composicao: ${data}
+  `;
+
+  if (question) {
+    return `
+    ${persona}
 
     Responda a seguinte pergunta com um html estruturado em HTML5 com estilização moderna via Tailwind CSS (através de CDN, dispensando arquivos externos) e um visual branco e light.
 
     Pergunta: ${question}
 
-    Nao inclua nada alem do html descrito acima na resposta. 
-    
-    Composicao: ${data}
+    ${composition}
     `;
   }
 
   return `
-    Voce é um analista financeiro da empresa AI Analysis.
-    
-    Sua funcao é analisar uma carteira de investimentos composta por ${type}.
+    ${persona}
 
     Forneca um relatorio estruturado em HTML5 com estilização moderna via Tailwind CSS (através de CDN, dispensando arquivos externos) 
     e um visual branco e light.
@@ -140,9 +164,7 @@ function buildPrompt(data, type, question) {
     3. Sugestoes de aportes;
     4. Pontos fortes e fracos.
 
-    Nao inclua nada alem do html descrito acima na resposta. 
-    
-    Composicao: ${data}
+    ${composition}
   `;
 }
 

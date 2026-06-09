@@ -2,7 +2,7 @@
  *  General Utilities
  * 
  *  Author: Fernando Costa de Almeida
- *  LastM : 23/05/2026
+ *  LastM : 06/09/2026
  * 
  * */
 
@@ -143,6 +143,20 @@ function showDialog(title, text, width, height) {
     .setHeight(height);
 
   SpreadsheetApp.getUi().showModalDialog(html, title);
+}
+
+function showErrorDialog(message) {
+  const html = HtmlService.createHtmlOutput(`
+    <div style="font-family: Arial; padding: 16px;">
+      <h1 style="color: red;">❌ Error </h1>
+      <p style="font-size: 11px;">${message}</p>
+      <button onclick="google.script.host.close()">Fechar</button>
+    </div>
+  `)
+  .setWidth(400)
+  .setHeight(300);
+
+  SpreadsheetApp.getUi().showModalDialog(html, "Error");
 }
 
 function shouldMask() {
